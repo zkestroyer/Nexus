@@ -24,38 +24,34 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  // Base styles
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
+  // Base styles: Added active:scale-[0.98] for a premium "click" feel
+  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background active:scale-[0.98]';
   
-  // Size styles
+  // Size styles: slightly refined padding for a modern look
   const sizeStyles = {
-    xs: 'text-xs px-2 py-1',
-    sm: 'text-sm px-3 py-1.5',
-    md: 'text-sm px-4 py-2',
-    lg: 'text-base px-5 py-2.5',
-    xl: 'text-lg px-6 py-3',
+    xs: 'text-xs px-2.5 py-1.5',
+    sm: 'text-sm px-3.5 py-2',
+    md: 'text-sm px-5 py-2.5',
+    lg: 'text-base px-6 py-3',
+    xl: 'text-lg px-8 py-4',
   };
   
-  // Variant styles
+  // Variant styles updated to use global CSS variables instead of hardcoded grays/blues
   const variantStyles = {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
-    secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500',
-    accent: 'bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-400',
-    outline: 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 focus:ring-primary-500',
-    ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-primary-500',
-    link: 'bg-transparent text-primary-600 hover:text-primary-700 hover:underline focus:ring-primary-500 p-0',
-    success: 'bg-success-500 text-white hover:bg-success-700 focus:ring-success-500',
-    warning: 'bg-warning-500 text-white hover:bg-warning-700 focus:ring-warning-500',
-    error: 'bg-error-500 text-white hover:bg-error-700 focus:ring-error-500',
+    primary: 'bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md hover:shadow-primary/25 focus:ring-primary',
+    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-secondary',
+    accent: 'bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-md hover:shadow-accent/25 focus:ring-accent',
+    outline: 'border-2 border-border bg-transparent text-foreground hover:border-primary/50 hover:bg-secondary/50 focus:ring-primary',
+    ghost: 'bg-transparent hover:bg-secondary/80 text-foreground focus:ring-secondary',
+    link: 'bg-transparent text-primary hover:text-primary/80 hover:underline focus:ring-primary p-0 active:scale-100',
+    // Fallbacks for standard utility colors if needed
+    success: 'bg-green-500 text-white hover:bg-green-600 hover:shadow-md hover:shadow-green-500/25 focus:ring-green-500',
+    warning: 'bg-amber-500 text-white hover:bg-amber-600 hover:shadow-md hover:shadow-amber-500/25 focus:ring-amber-500',
+    error: 'bg-red-500 text-white hover:bg-red-600 hover:shadow-md hover:shadow-red-500/25 focus:ring-red-500',
   };
   
-  // Loading state
-  const loadingClass = isLoading ? 'opacity-70 cursor-not-allowed' : '';
-  
-  // Width
+  const loadingClass = isLoading ? 'opacity-70 cursor-not-allowed active:scale-100' : '';
   const widthClass = fullWidth ? 'w-full' : '';
-  
-  // Disabled state
   const disabledClass = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '';
   
   const combinedClassName = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${widthClass} ${loadingClass} ${disabledClass} ${className}`;
@@ -73,9 +69,9 @@ export const Button: React.FC<ButtonProps> = ({
         </svg>
       )}
       
-      {!isLoading && leftIcon && <span className="mr-2">{leftIcon}</span>}
+      {!isLoading && leftIcon && <span className="mr-2.5 opacity-80">{leftIcon}</span>}
       {children}
-      {!isLoading && rightIcon && <span className="ml-2">{rightIcon}</span>}
+      {!isLoading && rightIcon && <span className="ml-2.5 opacity-80">{rightIcon}</span>}
     </button>
   );
 };

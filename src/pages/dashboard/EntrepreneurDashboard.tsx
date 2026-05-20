@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle } from 'lucide-react';
+import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle, ShieldCheck } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -11,6 +11,11 @@ import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
 import { investors } from '../../data/users';
 
+// Feature components
+import MeetingCalendar from '../../features/calendar/MeetingCalendar';
+import PaymentCenter from '../../features/payments/PaymentCenter';
+import ProductTour from '../../features/onboarding/ProductTour';
+
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
@@ -18,7 +23,6 @@ export const EntrepreneurDashboard: React.FC = () => {
   
   useEffect(() => {
     if (user) {
-      // Load collaboration requests
       const requests = getRequestsForEntrepreneur(user.id);
       setCollaborationRequests(requests);
     }
@@ -38,19 +42,29 @@ export const EntrepreneurDashboard: React.FC = () => {
   
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex justify-between items-center">
+      {/* 1. Inject the Tour Component */}
+      <ProductTour />
+
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user.name}</h1>
           <p className="text-gray-600">Here's what's happening with your startup today</p>
         </div>
         
-        <Link to="/investors">
-          <Button
-            leftIcon={<PlusCircle size={18} />}
-          >
-            Find Investors
-          </Button>
-        </Link>
+        <div className="flex gap-3">
+          {/* 2. Add 'tour-deal-room' target class to a new Deal Room button */}
+          <Link to="/deal-room" className="tour-deal-room">
+            <Button variant="outline" leftIcon={<ShieldCheck size={18} />}>
+              Deal Room
+            </Button>
+          </Link>
+
+          <Link to="/investors">
+            <Button leftIcon={<PlusCircle size={18} />}>
+              Find Investors
+            </Button>
+          </Link>
+        </div>
       </div>
       
       {/* Summary cards */}
@@ -113,8 +127,22 @@ export const EntrepreneurDashboard: React.FC = () => {
           </CardBody>
         </Card>
       </div>
+
+      {/* 3. Add 'tour-financial-hub' target class right here */}
+      <div className="w-full pt-4 tour-financial-hub">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-gray-900">Financial Hub</h2>
+          <p className="text-sm text-gray-600">Manage your startup's capital and incoming investments.</p>
+        </div>
+        <PaymentCenter />
+      </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* 4. Add 'tour-calendar' target class right here */}
+      <div className="w-full pt-4 tour-calendar">
+        <MeetingCalendar />
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
         {/* Collaboration requests */}
         <div className="lg:col-span-2 space-y-4">
           <Card>

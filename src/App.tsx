@@ -29,6 +29,7 @@ import { DealsPage } from './pages/deals/DealsPage';
 
 // Chat Pages
 import { ChatPage } from './pages/chat/ChatPage';
+import { DealRoom } from './pages/DealRoom';
 
 function App() {
   return (
@@ -89,6 +90,9 @@ function App() {
             <Route index element={<ChatPage />} />
             <Route path=":userId" element={<ChatPage />} />
           </Route>
+
+          {/* Deal Room Route */}
+          <Route path="/deal-room" element={<DealRoom />} />
           
           {/* Redirect root to login */}
           <Route path="/" element={<Navigate to="/login" replace />} />

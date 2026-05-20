@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, PieChart, Filter, Search, PlusCircle } from 'lucide-react';
+import { Users, PieChart, Filter, Search, PlusCircle, ShieldCheck } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Badge } from '../../components/ui/Badge';
 import { EntrepreneurCard } from '../../components/entrepreneur/EntrepreneurCard';
 import { useAuth } from '../../context/AuthContext';
-import { Entrepreneur } from '../../types';
 import { entrepreneurs } from '../../data/users';
 import { getRequestsFromInvestor } from '../../data/collaborationRequests';
+
+// Feature components
+import MeetingCalendar from '../../features/calendar/MeetingCalendar';
+import PaymentCenter from '../../features/payments/PaymentCenter';
+import ProductTour from '../../features/onboarding/ProductTour';
 
 export const InvestorDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -18,30 +22,23 @@ export const InvestorDashboard: React.FC = () => {
   
   if (!user) return null;
   
-  // Get collaboration requests sent by this investor
   const sentRequests = getRequestsFromInvestor(user.id);
-  const requestedEntrepreneurIds = sentRequests.map(req => req.entrepreneurId);
   
-  // Filter entrepreneurs based on search and industry filters
   const filteredEntrepreneurs = entrepreneurs.filter(entrepreneur => {
-    // Search filter
     const matchesSearch = searchQuery === '' || 
       entrepreneur.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entrepreneur.startupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entrepreneur.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entrepreneur.pitchSummary.toLowerCase().includes(searchQuery.toLowerCase());
     
-    // Industry filter
     const matchesIndustry = selectedIndustries.length === 0 || 
       selectedIndustries.includes(entrepreneur.industry);
     
     return matchesSearch && matchesIndustry;
   });
   
-  // Get unique industries for filter
   const industries = Array.from(new Set(entrepreneurs.map(e => e.industry)));
   
-  // Toggle industry selection
   const toggleIndustry = (industry: string) => {
     setSelectedIndustries(prevSelected => 
       prevSelected.includes(industry)
@@ -52,19 +49,29 @@ export const InvestorDashboard: React.FC = () => {
   
   return (
     <div className="space-y-6 animate-fade-in">
+      {/* 1. Inject the Tour Component */}
+      <ProductTour />
+
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Discover Startups</h1>
           <p className="text-gray-600">Find and connect with promising entrepreneurs</p>
         </div>
         
-        <Link to="/entrepreneurs">
-          <Button
-            leftIcon={<PlusCircle size={18} />}
-          >
-            View All Startups
-          </Button>
-        </Link>
+        <div className="flex gap-3">
+          {/* 2. Add 'tour-deal-room' target class to a new Deal Room button */}
+          <Link to="/deal-room" className="tour-deal-room">
+            <Button variant="outline" leftIcon={<ShieldCheck size={18} />}>
+              Deal Room
+            </Button>
+          </Link>
+
+          <Link to="/entrepreneurs">
+            <Button leftIcon={<PlusCircle size={18} />}>
+              View All Startups
+            </Button>
+          </Link>
+        </div>
       </div>
       
       {/* Filters and search */}
@@ -146,9 +153,23 @@ export const InvestorDashboard: React.FC = () => {
           </CardBody>
         </Card>
       </div>
+
+      {/* 3. Add 'tour-financial-hub' target class */}
+      <div className="w-full pt-4 tour-financial-hub">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-gray-900">Capital Management</h2>
+          <p className="text-sm text-gray-600">Track your portfolio balance and fund active deals.</p>
+        </div>
+        <PaymentCenter />
+      </div>
+
+      {/* 4. Add 'tour-calendar' target class */}
+      <div className="w-full pt-4 tour-calendar">
+        <MeetingCalendar />
+      </div>
       
       {/* Entrepreneurs grid */}
-      <div>
+      <div className="pt-4">
         <Card>
           <CardHeader>
             <h2 className="text-lg font-medium text-gray-900">Featured Startups</h2>
