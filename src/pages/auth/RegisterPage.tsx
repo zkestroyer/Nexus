@@ -5,10 +5,12 @@ import { CircleDollarSign, Building2, User, Mail, Lock, ArrowRight, ShieldCheck 
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { UserRole } from '../../types';
+import { useAuth } from '../../context/AuthContext';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  
+  const { register } = useAuth();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,16 +44,18 @@ export const RegisterPage: React.FC = () => {
     return 'Strong';
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate API registration call for demo
-    setTimeout(() => {
-      setIsLoading(false);
-      // Route user straight to login after successful creation
+
+    try {
+      await register(name, email, password, role);
       navigate('/login');
-    }, 1200);
+    } catch (error) {
+      // Error handled by toast in AuthContext
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
