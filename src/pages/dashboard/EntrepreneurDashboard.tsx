@@ -14,7 +14,6 @@ import { investors } from '../../data/users';
 // Feature components
 import MeetingCalendar from '../../features/calendar/MeetingCalendar';
 import PaymentCenter from '../../features/payments/PaymentCenter';
-import ProductTour from '../../features/onboarding/ProductTour';
 
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -42,9 +41,6 @@ export const EntrepreneurDashboard: React.FC = () => {
   
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* 1. Inject the Tour Component */}
-      <ProductTour />
-
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user.name}</h1>

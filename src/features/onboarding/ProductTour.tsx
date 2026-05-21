@@ -8,7 +8,7 @@ export default function ProductTour() {
   useEffect(() => {
     const hasSeenTour = localStorage.getItem('nexus_tour_completed');
     if (!hasSeenTour) {
-      const timer = setTimeout(() => setRun(true), 1500);
+      const timer = setTimeout(() => setRun(true), 500);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -18,12 +18,12 @@ export default function ProductTour() {
       target: 'body',
       content: 'Welcome to the Nexus Platform! Let us give you a quick tour of your new command center.',
       placement: 'center',
-      skipBeacon: true, 
+      skipBeacon: true,
     },
     {
       target: '.tour-financial-hub',
       content: 'This is your Financial Hub. Manage your capital, track secure transactions, and monitor deal flow in real-time.',
-      placement: 'bottom',
+      placement: 'top',
     },
     {
       target: '.tour-calendar',
@@ -51,20 +51,17 @@ export default function ProductTour() {
     <Joyride
       steps={steps}
       run={run}
-      continuous={true} // continuous remains a top-level prop in V3
+      continuous={true}
       onEvent={handleJoyrideEvent}
       options={{
-        // V3 CHANGE: Buttons are now declared in an array inside options
-        buttons: ['skip', 'back', 'close', 'primary'], 
-        showProgress: true, // V3 CHANGE: Moved inside options
-        
-        // Theming remains here
+        buttons: ['skip', 'back', 'close', 'primary'],
+        showProgress: true,
         primaryColor: 'hsl(var(--primary))',
         textColor: 'hsl(var(--foreground))',
         backgroundColor: 'hsl(var(--background))',
         arrowColor: 'hsl(var(--background))',
         overlayColor: 'rgba(0, 0, 0, 0.6)',
-        zIndex: 1000,
+        zIndex: 10000,
       }}
     />
   );

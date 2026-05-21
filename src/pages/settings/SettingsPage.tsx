@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Lock, Bell, Globe, Palette, CreditCard } from 'lucide-react';
+import { User, Lock, Bell, Globe, Palette, CreditCard, RotateCcw } from 'lucide-react';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -9,7 +9,12 @@ import { useAuth } from '../../context/AuthContext';
 
 export const SettingsPage: React.FC = () => {
   const { user } = useAuth();
-  
+
+  const resetProductTour = () => {
+    localStorage.removeItem('nexus_tour_completed');
+    window.location.href = '/dashboard/investor';
+  };
+
   if (!user) return null;
   
   return (
@@ -165,6 +170,24 @@ export const SettingsPage: React.FC = () => {
                     <Button>Update Password</Button>
                   </div>
                 </div>
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* Product Tour Settings */}
+          <Card>
+            <CardHeader>
+              <h2 className="text-lg font-medium text-gray-900">Help & Onboarding</h2>
+            </CardHeader>
+            <CardBody className="space-y-6">
+              <div>
+                <h3 className="text-sm font-medium text-gray-900 mb-2">Product Tour</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Replay the interactive guided tour to learn about the platform features
+                </p>
+                <Button variant="outline" leftIcon={<RotateCcw size={18} />} onClick={resetProductTour}>
+                  Replay Tour
+                </Button>
               </div>
             </CardBody>
           </Card>
